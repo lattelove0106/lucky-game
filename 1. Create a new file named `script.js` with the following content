@@ -1,0 +1,4 @@
+function guessNumber() {
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    document.getElementById('guess').innerText = `I'm thinking of a number between 1 and 100.`;
+}
