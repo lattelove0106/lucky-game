@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .lottery-container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            max-width: 400px;
+        }
+        .number {
+            font-size: 2em;
+            color: #333;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lottery</h1>
+    <div class="lottery-container">
+        {% for number in numbers %}
+            <div class="number">{{ number }}</div>
+        {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const numbers = [];
+            for (let i = 1; i <= 45; i++) {
+                numbers.push(i);
+            }
+            shuffle(numbers);
+
+            function shuffle(array) {
+                let currentIndex = array.length, randomIndex;
+
+                while (currentIndex > 0) {
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+
+                    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+                }
+
+                return array;
+            }
+
+            const selectedNumbers = numbers.slice(0, 6);
+            for (let i = 0; i < selectedNumbers.length; i++) {
+                $('.number').eq(i).text(selectedNumbers[i]);
+            }
+        });
+    </script>
+</body>
+</html>
