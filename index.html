@@ -1,62 +1,262 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lottery</title>
+    <title>Premium Neon Lotto</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;600;800&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b111e;
         }
-        .lottery-container {
-            display: flex;
-            justify-content: space-around;
-            width: 80%;
-            max-width: 400px;
+        /* Premium glowing effects */
+        .neon-border {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.15), inset 0 0 15px rgba(56, 189, 248, 0.05);
         }
-        .number {
-            font-size: 2em;
-            color: #333;
-            margin: 10px;
+        .neon-glow-btn {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.45);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .neon-glow-btn:hover {
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.75);
+            transform: translateY(-4px) scale(1.02);
+        }
+        .neon-glow-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+        /* Mechanical popping animation */
+        @keyframes popIn {
+            0% {
+                transform: scale(0) translateY(50px) rotate(-180deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.3) translateY(-10px) rotate(15deg);
+            }
+            100% {
+                transform: scale(1) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        .ball-pop {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        /* Official Lotto color gradient specifications */
+        .ball-yellow {
+            background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 60%, #a16207 100%);
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.6), inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        .ball-blue {
+            background: radial-gradient(circle at 35% 35%, #93c5fd 0%, #2563eb 60%, #1e3a8a 100%);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6), inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        .ball-red {
+            background: radial-gradient(circle at 35% 35%, #fca5a5 0%, #dc2626 60%, #7f1d1d 100%);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.6), inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        .ball-grey {
+            background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #64748b 60%, #334155 100%);
+            box-shadow: 0 0 20px rgba(100, 116, 139, 0.6), inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        .ball-green {
+            background: radial-gradient(circle at 35% 35%, #86efac 0%, #16a34a 60%, #14532d 100%);
+            box-shadow: 0 0 20px rgba(22, 163, 74, 0.6), inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
         }
     </style>
 </head>
-<body>
-    <h1>Lottery</h1>
-    <div class="lottery-container">
-        {% for number in numbers %}
-            <div class="number">{{ number }}</div>
-        {% endfor %}
-    </div>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Glowing Top Banner -->
+    <header class="w-full py-6 border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-md px-6 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl font-black tracking-widest bg-gradient-to-r from-sky-400 to-indigo-500 bg-clip-text text-transparent">PREMIUM LOTTO</span>
+            <span class="px-2 py-0.5 bg-sky-500/10 text-sky-400 rounded-full text-xs font-semibold tracking-wide border border-sky-500/20">PRO</span>
+        </div>
+        <div class="text-sm text-slate-400">
+            SYSTEM ACTIVE 🟢
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-12 relative">
+        <!-- Floating neon ambient circles -->
+        <div class="absolute w-[350px] h-[350px] rounded-full bg-cyan-500/5 blur-[120px] top-1/4 left-1/4 pointer-events-none"></div>
+        <div class="absolute w-[350px] h-[350px] rounded-full bg-indigo-500/5 blur-[120px] bottom-1/4 right-1/4 pointer-events-none"></div>
+
+        <div class="w-full max-w-4xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-xl rounded-3xl p-8 md:p-12 neon-border text-center z-10 relative">
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-3 tracking-tight">
+                <span class="bg-gradient-to-r from-slate-100 via-white to-slate-300 bg-clip-text text-transparent">초정밀 인공지능</span>
+                <span class="bg-gradient-to-r from-cyan-400 to-sky-400 bg-clip-text text-transparent">로또 번호 추출기</span>
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base mb-10 tracking-wide">정밀 무작위 시뮬레이터 시스템을 통한 번호 고속 생성</p>
+
+            <!-- Draw Platform -->
+            <div class="min-h-[160px] flex flex-col justify-center items-center mb-12">
+                <!-- Idle screen when no balls drawn -->
+                <div id="idle-screen" class="text-slate-500 text-lg transition-all duration-300">
+                    <div class="flex justify-center space-x-1 mb-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500/50 animate-bounce" style="animation-delay: 0s"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500/50 animate-bounce" style="animation-delay: 0.15s"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500/50 animate-bounce" style="animation-delay: 0.3s"></span>
+                    </div>
+                    아래 버튼을 눌러 추첨을 시작하세요
+                </div>
+
+                <!-- Ball Arena (Hidden initially) -->
+                <div id="ball-arena" class="hidden w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 transition-all duration-500">
+                    <!-- Standard 6 numbers -->
+                    <div id="standard-balls" class="flex flex-wrap items-center justify-center gap-4"></div>
+                    
+                    <!-- Plus divider -->
+                    <div id="plus-divider" class="text-slate-500 font-extrabold text-2xl animate-pulse md:mx-1 flex items-center justify-center w-10 h-10 rounded-full bg-slate-800/40 border border-slate-700/50">
+                        +
+                    </div>
+
+                    <!-- Bonus number -->
+                    <div id="bonus-ball" class="flex flex-col items-center">
+                        <div id="bonus-container"></div>
+                        <span class="text-[10px] tracking-widest text-cyan-400/80 uppercase font-bold mt-2">Bonus</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <button id="draw-btn" class="neon-glow-btn text-slate-900 font-extrabold text-lg md:text-xl py-4.5 px-10 md:px-14 rounded-full tracking-wider uppercase transition-all duration-300 select-none">
+                번호 추첨하기
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 text-center text-xs text-slate-600 border-t border-slate-900/60 bg-slate-950/40">
+        &copy; 2026 Premium Random Lotto Simulator. All rights reserved.
+    </footer>
+
+    <!-- Logic code -->
     <script>
-        $(document).ready(function() {
-            const numbers = [];
-            for (let i = 1; i <= 45; i++) {
-                numbers.push(i);
-            }
-            shuffle(numbers);
+        const drawBtn = document.getElementById('draw-btn');
+        const idleScreen = document.getElementById('idle-screen');
+        const ballArena = document.getElementById('ball-arena');
+        const standardBallsContainer = document.getElementById('standard-balls');
+        const bonusBallContainer = document.getElementById('bonus-container');
 
-            function shuffle(array) {
-                let currentIndex = array.length, randomIndex;
-
-                while (currentIndex > 0) {
-                    randomIndex = Math.floor(Math.random() * currentIndex);
-                    currentIndex--;
-
-                    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        // Audio synthesizer using Web Audio API to prevent external audio loading dependencies
+        let audioCtx = null;
+        function playPopSound(freq, type = 'sine', duration = 0.12) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                // Pitch bend for a modern pop effect
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + duration);
 
-                return array;
-            }
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
 
-            const selectedNumbers = numbers.slice(0, 6);
-            for (let i = 0; i < selectedNumbers.length; i++) {
-                $('.number').eq(i).text(selectedNumbers[i]);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                // Audio Context fallback if not allowed by browser autoplay policy
             }
+        }
+
+        // Color coding depending on lottery number
+        function getBallColorClass(num) {
+            if (num >= 1 && num <= 10) return 'ball-yellow';
+            if (num >= 11 && num <= 20) return 'ball-blue';
+            if (num >= 21 && num <= 30) return 'ball-red';
+            if (num >= 31 && num <= 40) return 'ball-grey';
+            return 'ball-green';
+        }
+
+        // Generates random sorted numbers
+        function generateLottoNumbers() {
+            const numbers = [];
+            while (numbers.length < 7) {
+                const randomNum = Math.floor(Math.random() * 45) + 1;
+                if (!numbers.includes(randomNum)) {
+                    numbers.push(randomNum);
+                }
+            }
+            // Standard 6 numbers sorted, 7th is bonus
+            const mainNumbers = numbers.slice(0, 6).sort((a, b) => a - b);
+            const bonusNumber = numbers[6];
+            return { mainNumbers, bonusNumber };
+        }
+
+        function triggerDraw() {
+            // Disable button during draws to prevent spam
+            drawBtn.disabled = true;
+            drawBtn.classList.add('opacity-50', 'pointer-events-none');
+
+            // Reset UI
+            idleScreen.classList.add('hidden');
+            ballArena.classList.remove('hidden');
+            standardBallsContainer.innerHTML = '';
+            bonusBallContainer.innerHTML = '';
+
+            const { mainNumbers, bonusNumber } = generateLottoNumbers();
+
+            // Sequentially drop standard balls
+            mainNumbers.forEach((num, index) => {
+                setTimeout(() => {
+                    const ball = document.createElement('div');
+                    const colorClass = getBallColorClass(num);
+                    ball.className = `ball-pop ${colorClass} w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-lg md:text-xl font-bold select-none transform transition-transform duration-300 hover:scale-110`;
+                    ball.textContent = num;
+                    standardBallsContainer.appendChild(ball);
+
+                    // Cybernetic synthesis pop sound effect
+                    playPopSound(250 + (index * 60), 'triangle', 0.15);
+                }, index * 250);
+            });
+
+            // Drop bonus ball
+            setTimeout(() => {
+                const ball = document.createElement('div');
+                const colorClass = getBallColorClass(bonusNumber);
+                ball.className = `ball-pop ${colorClass} w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-lg md:text-xl font-bold select-none transform transition-transform duration-300 hover:scale-110`;
+                ball.textContent = bonusNumber;
+                bonusBallContainer.appendChild(ball);
+
+                // Distinct high frequency beep sound for the premium bonus ball
+                playPopSound(680, 'sine', 0.25);
+
+                // Re-enable draw button
+                setTimeout(() => {
+                    drawBtn.disabled = false;
+                    drawBtn.classList.remove('opacity-50', 'pointer-events-none');
+                }, 400);
+
+            }, 6 * 250);
+        }
+
+        drawBtn.addEventListener('click', () => {
+            // Initializing Web Audio context from user interaction rule
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            triggerDraw();
         });
     </script>
 </body>
